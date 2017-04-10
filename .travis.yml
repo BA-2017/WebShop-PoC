@@ -1,7 +1,7 @@
 sudo: required
 services:
   - docker
-language: csharp
+#language: csharp
 script:
   # Build the builder image
   - docker build -t build-image -f Dockerfile.build .
