@@ -1,0 +1,39 @@
+box: microsoft/aspnetcore-build
+no-response-timeout: 10
+build:
+  steps:
+    -script:
+        name: cd project
+        code: |
+          cd ./WebShop-PoC
+    - script:
+        name: restore            
+        code: |
+          dotnet restore
+    - script:
+        name: build        
+        code: |
+          dotnet build  
+    - script:
+        name: publish           
+        code: |
+          dotnet publish -o publish
+    - script:
+        name: copy settings
+        code: |
+          # cp Config.json publish
+          cp appsettings.json publish
+    - script:
+        name: copy binary        
+        code: |
+          cp -r . $WERCKER_OUTPUT_DIR/app
+
+deploy:
+  steps:
+    - internal/docker-push:
+        cwd: $WERCKER_OUTPUT_DIR/app
+        username: $USERNAME
+        password: $PASSWORD
+        repository: ba2017/webshop-poc
+        registry: https://registry.hub.docker.com
+        entrypoint: "dotnet WebShop-PoC.dll"
