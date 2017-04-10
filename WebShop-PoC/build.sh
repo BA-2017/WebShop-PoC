@@ -14,7 +14,7 @@ cd $APP_NAME
 # Build the builder image
 docker build --force-rm -t build-image -f Dockerfile.build .
 # Create a container from the built image
-docker create --name build-container --rm build-image
+docker create --name build-container build-image
 # Copy binaries
 docker cp build-container:/out ./PublishOutput
 # Build the productin image
