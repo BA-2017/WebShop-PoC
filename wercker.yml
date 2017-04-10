@@ -1,5 +1,5 @@
 box: microsoft/aspnetcore-build
-no-response-timeout: 20
+# no-response-timeout: 20
 build:
   steps:
     - script:
