@@ -30,7 +30,6 @@ deploy:
         cwd: $WERCKER_OUTPUT_DIR/app
         username: $USERNAME
         password: $PASSWORD
-        tag: latest
         repository: ba2017/webshop-poc
         registry: https://registry.hub.docker.com
         # cmd: "dotnet WebShop-PoC.dll"
