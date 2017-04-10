@@ -1,0 +1,4 @@
+FROM microsoft/aspnetcore
+WORKDIR /app
+COPY ./PublishOutput .
+ENTRYPOINT ["dotnet", "WebShop-PoC.dll"]

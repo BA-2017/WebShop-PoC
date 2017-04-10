@@ -1,0 +1,13 @@
+sudo: required
+services:
+  - docker
+language: csharp
+script:
+  # Build the builder image
+  - docker build -t build-image -f Dockerfile.build .
+  # Create a container from the built image
+  - docker create --name build-cont build-image
+  # Copy binaries
+  - docker cp build-cont:/out ./PublishOutput
+  # Build the productin image
+  - docker build -t ba2017/webshop-poc:0.1 -f Dockerfile.prod .
