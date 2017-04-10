@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: poc
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webshop-poc
+  namespace: poc
+  labels:
+    app: webshop-poc
+spec:
+  template:
+    metadata:
+      labels:
+        app: webshop-poc
+    spec:
+      containers:
+      - name: webshop-poc
+        image: ba2017/webshop-poc:0.1-alpha
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://*:9000"
+        ports:
+        - containerPort: 9000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webshop-poc
+  namespace: poc
+  labels:
+    app: webshop-poc
+spec:
+  selector:
+    app: webshop-poc
+  ports:
+  - port: 80
+    targetPort: 9000
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: webshop-poc
+  namespace: poc
+  labels:
+    # let kube-cert-manager generate an SSL certificate
+    stable.k8s.psg.io/kcm.class: "default"
+spec:
+  tls:
+  - hosts:
+    - poc.zhaw.tk
+    secretName: webshop-poc-tls-cert
+  rules:
+  - host: poc.zhaw.tk
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webshop-poc
+          servicePort: 80
