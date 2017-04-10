@@ -10,7 +10,7 @@ script:
   # Copy binaries
   - docker cp build-cont:/out ./PublishOutput
   # Build the productin image
-  - docker build -t ba2017/webshop-poc:latest -f Dockerfile.prod ./PublishOutput
+  - docker build -t ba2017/webshop-poc:latest -f Dockerfile.prod .
   - docker tag ba2017/webshop-poc:latest ba2017/webshop-poc:$TRAVIS_BUILD_NUMBER
   # Login to docker hub
   - docker login -u="$DOCKER_HUB_USER" -p="$DOCKER_HUB_PASSWORD"
