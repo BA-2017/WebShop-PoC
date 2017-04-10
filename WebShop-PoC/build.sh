@@ -3,7 +3,7 @@ set -v
 set -e
 
 # Config
-APP_NAME=webshop-poc
+APP_NAME=WebShop-PoC
 
 DOCKER_REPO=ba2017
 DOCKER_IMAGE=$DOCKER_REPO"/"$APP_NAME
