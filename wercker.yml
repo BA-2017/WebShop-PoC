@@ -33,5 +33,5 @@ deploy:
         password: $PASSWORD
         tag: latest
         repository: ba2017/webshop-poc
-        registry: https://registry.hub.docker.com/v2
-        entrypoint: "dotnet WebShop-PoC.dll"
+        registry: https://registry.hub.docker.com
+        # cmd: "dotnet WebShop-PoC.dll"
