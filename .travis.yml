@@ -3,17 +3,5 @@ services:
   - docker
 language: generic
 script:
-  # Build the builder image
-  - docker build -t build-image -f Dockerfile.build .
-  # Create a container from the built image
-  - docker create --name build-cont build-image
-  # Copy binaries
-  - docker cp build-cont:/out ./PublishOutput
-  # Build the productin image
-  - docker build -t ba2017/webshop-poc:latest -f Dockerfile.prod .
-  - docker tag ba2017/webshop-poc:latest ba2017/webshop-poc:$TRAVIS_BUILD_NUMBER
-  # Login to docker hub
-  - docker login -u="$DOCKER_HUB_USER" -p="$DOCKER_HUB_PASSWORD"
-  # Push docker image
-  - docker push ba2017/webshop-poc:$TRAVIS_BUILD_NUMBER
-  - docker push ba2017/webshop-poc:latest
+  # Invoke build script
+  - WebShop-PoC/build.sh
