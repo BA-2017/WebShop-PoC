@@ -1,17 +1,16 @@
- apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: mssql-poc
-    namespace: poc
-  spec:
-    capacity:
-      storage: 2Gi
-    accessModes:
-      - ReadWriteOnce
-    storageClassName: slow
-    nfs:
-      path: /kubernetes
-      server: 172.21.21.201
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mssql-poc
+  namespace: poc
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /kubernetes
+    server: 172.21.21.201
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -19,12 +18,11 @@ metadata:
   name: mssql-poc
   namespace: poc
 spec:
-  accessModes:
-    - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi
-  storageClassName: slow
+  accessModes:
+    - ReadWriteOnce
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -41,19 +39,36 @@ spec:
     spec:
       containers:
       - name: mssql-poc
-        image: microsoft/mssql-server-linux
+        image: mysql:8.0
         env:
-        - name: ASPNETCORE_URLS
-          value: "http://*:9000"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MYSQL_DATABASE
+          value: "TESTDB"
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-poc-credentials
+              key: sa_password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mssql-poc-credentials
+              key: user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-poc-credentials
+              key: user_password
         ports:
-        - containerPort: 1433
+        - containerPort: 3306
         volumeMounts:
-        - mountPath: "/var/www/html"
-        name: mssql-poc
+        - name: mssql-poc
+          mountPath: "/var/lib/mysql"
       volumes:
       - name: mssql-poc
-        persistentVolumeClaim:
-          claimName: mssql-poc
+        hostPath:
+          path: /mysql
 ---
 apiVersion: v1
 kind: Service
