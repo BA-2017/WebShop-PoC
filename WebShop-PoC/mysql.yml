@@ -1,0 +1,70 @@
+ apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: mssql-poc
+    namespace: poc
+  spec:
+    capacity:
+      storage: 2Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: slow
+    nfs:
+      path: /kubernetes
+      server: 172.21.21.201
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-poc
+  namespace: poc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: slow
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mssql-poc
+  namespace: poc
+  labels:
+    app: mssql-poc
+spec:
+  template:
+    metadata:
+      labels:
+        app: mssql-poc
+    spec:
+      containers:
+      - name: mssql-poc
+        image: microsoft/mssql-server-linux
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://*:9000"
+        ports:
+        - containerPort: 1433
+        volumeMounts:
+        - mountPath: "/var/www/html"
+        name: mssql-poc
+      volumes:
+      - name: mssql-poc
+        persistentVolumeClaim:
+          claimName: mssql-poc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-poc
+  namespace: poc
+  labels:
+    app: mssql-poc
+spec:
+  selector:
+    app: mssql-poc
+  ports:
+  - port: 80
+    targetPort: 9000
