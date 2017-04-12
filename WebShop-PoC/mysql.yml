@@ -81,5 +81,5 @@ spec:
   selector:
     app: mssql-poc
   ports:
-  - port: 80
-    targetPort: 9000
+  - port: 3306
+    targetPort: 3306
