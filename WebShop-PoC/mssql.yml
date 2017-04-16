@@ -39,36 +39,38 @@ spec:
     spec:
       containers:
       - name: mssql-poc
-        image: mysql:8.0
+        image: microsoft/mssql-server-linux:ctp1-4
         env:
         - name: ACCEPT_EULA
           value: "Y"
-        - name: MYSQL_DATABASE
+        - name: MSSQL_DATABASE
           value: "TESTDB"
-        - name: MYSQL_ROOT_PASSWORD
+        - name: SA_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mssql-poc-credentials
               key: sa_password
-        - name: MYSQL_USER
+        - name: MSSQL_USER
           valueFrom:
             secretKeyRef:
               name: mssql-poc-credentials
               key: user
-        - name: MYSQL_PASSWORD
+        - name: MSSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mssql-poc-credentials
               key: user_password
         ports:
-        - containerPort: 3306
+        - containerPort: 1433
         volumeMounts:
         - name: mssql-poc
-          mountPath: "/var/lib/mysql"
+          mountPath: "/var/opt/mssql/data"
+      nodeSelector:
+        kubernetes.io/hostname: linux2
       volumes:
       - name: mssql-poc
         hostPath:
-          path: /mysql
+          path: /mssql
 ---
 apiVersion: v1
 kind: Service
@@ -81,5 +83,5 @@ spec:
   selector:
     app: mssql-poc
   ports:
-  - port: 3306
-    targetPort: 3306
+  - port: 1433
+    targetPort: 1433
