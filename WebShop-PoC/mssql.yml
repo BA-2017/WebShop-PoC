@@ -9,7 +9,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   nfs:
-    path: /kubernetes
+    path: /kubernetes/mssql-poc
     server: 172.21.21.201
 ---
 kind: PersistentVolumeClaim
@@ -40,6 +40,9 @@ spec:
       containers:
       - name: mssql-poc
         image: microsoft/mssql-server-linux:ctp1-4
+        #resources:
+        #  requests:
+        #    memory: "3.8Gi"
         env:
         - name: ACCEPT_EULA
           value: "Y"
@@ -65,12 +68,10 @@ spec:
         volumeMounts:
         - name: mssql-poc
           mountPath: "/var/opt/mssql/data"
-      nodeSelector:
-        kubernetes.io/hostname: linux2
       volumes:
       - name: mssql-poc
-        hostPath:
-          path: /mssql
+        persistentVolumeClaim:
+          claimName: mssql-poc
 ---
 apiVersion: v1
 kind: Service
