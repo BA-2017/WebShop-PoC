@@ -40,9 +40,9 @@ spec:
       containers:
       - name: mssql-poc
         image: microsoft/mssql-server-linux:ctp1-4
-        #resources:
-        #  requests:
-        #    memory: "3.8Gi"
+        resources:
+          requests:
+            memory: "3.25Gi"
         env:
         - name: ACCEPT_EULA
           value: "Y"
