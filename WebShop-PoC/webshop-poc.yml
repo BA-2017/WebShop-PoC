@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: webshop-poc
-        image: ba2017/webshop-poc:32
+        image: ba2017/webshop-poc:33
         env:
         - name: ASPNETCORE_URLS
           value: "http://*:9000"
