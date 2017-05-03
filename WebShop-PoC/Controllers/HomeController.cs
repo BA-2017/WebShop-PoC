@@ -21,7 +21,7 @@ namespace WebShop_PoC.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "MachineName: " + Environment.MachineName;
             _logger.LogInformation("TEST log");
             return View();
         }

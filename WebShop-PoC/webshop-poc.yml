@@ -11,6 +11,7 @@ metadata:
   labels:
     app: webshop-poc
 spec:
+  replicas: 3
   template:
     metadata:
       labels:
@@ -18,7 +19,7 @@ spec:
     spec:
       containers:
       - name: webshop-poc
-        image: ba2017/webshop-poc:31
+        image: ba2017/webshop-poc:32
         env:
         - name: ASPNETCORE_URLS
           value: "http://*:9000"
