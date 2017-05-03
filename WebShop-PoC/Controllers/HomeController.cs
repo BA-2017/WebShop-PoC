@@ -33,6 +33,14 @@ namespace WebShop_PoC.Controllers
             return View();
         }
 
+        public IActionResult Ready(){
+            return Ok();
+        }
+
+        public IActionResult Live(){
+            return Ok();
+        }
+
         public IActionResult Error()
         {
             return View();
