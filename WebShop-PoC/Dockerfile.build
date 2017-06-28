@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore-build
+FROM microsoft/aspnetcore-build:1.1.2
 
 WORKDIR /app
 
@@ -6,4 +6,4 @@ COPY *.csproj .
 RUN dotnet restore
 
 COPY . .
-RUN dotnet publish --output /out/ --configuration Release
+RUN dotnet restore && dotnet publish --output /out/ --configuration Release
