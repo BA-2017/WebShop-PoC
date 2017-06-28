@@ -14,6 +14,8 @@ namespace WebShop_PoC.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ((Controller) context.Controller).ViewData["ServerName"] = Environment.MachineName;
+            ((Controller) context.Controller).ViewData["Version"] = "v0.34";
+            ((Controller) context.Controller).ViewData["Time"] = DateTime.Now.ToString();
             base.OnActionExecuting(context);
         }
     }
